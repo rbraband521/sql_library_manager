@@ -1,0 +1,28 @@
+extends layout
+
+block content   
+    body
+    h1 Books
+        //- form(action="/books/" method="get")
+        //- //- label(for="userSearch") Search:
+        //- input(id="userSearch" type="text" name= "" value="Search" required autocfocus)
+        //- input(type="submit" value="OK")
+    table
+        thead
+            tr
+                th Title
+                th Author
+                th Genre
+                th Year
+            tr
+        thead
+        each book in books
+            book
+                tr
+                    td
+                        a(href=`/books/${book.id}`)= book.title
+                    td= book.author
+                    td= book.genre
+                    td= book.year
+    p
+        a(class="button" href="/books/new") Add New Entry
