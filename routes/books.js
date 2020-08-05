@@ -25,7 +25,7 @@ router.get('/new', (req, res) => {
     res.render("new-book", { book: { }, title: "New Book" });
   });
 
-//Posting a new book to the database
+//Posting a new book to the database, with SQL validation errors
 router.post('/new', asyncHandler(async (req, res) => {
     let book;
     try {
@@ -52,12 +52,23 @@ router.get("/:id", asyncHandler(async (req, res, next) => {
   })); 
 
   
-/* Update an book. */
-router.post('/:id/update', asyncHandler(async (req, res) => {
-    const book = await Book.findByPk(req.params.id);
-        await book.update(req.body);
-        res.redirect("/books");
-  }));
+/* Update a book with SQL validation errors. */
+router.post('/:id', asyncHandler(async (req, res) => {
+  let book;
+  try {
+    book = await Book.findByPk(req.params.id);
+      await book.update(req.body);
+      res.redirect('/books');
+  } catch (error) {
+    if(error.name === "SequelizeValidationError") {
+      res.render('update-book', { book, errors: error.errors })
+      await book.update(req.body);
+      res.redirect('/books');
+    } else {
+      throw error;
+  }  
+  }
+}));
 
   /* Delete individual book. */
 router.post('/:id/delete', asyncHandler(async (req ,res) => {
