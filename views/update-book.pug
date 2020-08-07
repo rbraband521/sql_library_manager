@@ -7,7 +7,7 @@ block content
         ul.error
             each err in errors
                 li= err.message
-    form(method= 'post', action= `/books/${book.id}/update`)
+    form(method= 'post', action= `/books/${book.id}/`)
         p
             label(for="title") Title
             input(name="title" type="text" id="title" value=book.title)
